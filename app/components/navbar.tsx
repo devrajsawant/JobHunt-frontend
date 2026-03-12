@@ -4,11 +4,13 @@ const Navbar = () => {
   return (
     <div className="flex justify-between px-10 items-center py-3 border-b bg-gray-200">
       <p className="text-3xl font-serif text-shadow-zinc-700 font-medium">
+        <Link href="/">
         JOB HUNT
+        </Link>
       </p>
       <div className="flex gap-4 text-lg">
         <p>
-          <Link href="/allJobs">Job</Link>
+          <Link href="/feed">Job</Link>
         </p>
         <p>
           <Link href="/allCompanies">Companies</Link>
