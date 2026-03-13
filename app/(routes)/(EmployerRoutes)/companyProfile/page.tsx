@@ -3,7 +3,7 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Star } from "lucide-react";
 
-import userFallback from "../../../public/userFallback.png";
+import userFallback from "../../../../public/userFallback.png";
 
 import CompanyAbout from "@/app/components/companyProfile/companyAbout";
 import CompanyJobs from "@/app/components/companyProfile/companyJobs";

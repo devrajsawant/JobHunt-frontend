@@ -1,7 +1,7 @@
+import CompaniesSearchBar from "@/app/components/companies/companiesSearchBar";
+import CompanyCard from "@/app/components/companies/companyCard";
+import Navbar from "@/app/components/navbar";
 import React from "react";
-import Navbar from "../components/navbar";
-import CompaniesSearchBar from "../components/companies/companiesSearchBar";
-import CompanyCard from "../components/companies/companyCard";
 
 const companies = [
   {

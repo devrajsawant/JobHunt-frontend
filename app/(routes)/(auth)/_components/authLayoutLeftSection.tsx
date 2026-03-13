@@ -1,6 +1,6 @@
 import Image from "next/image";
 import React from "react";
-import AuthPage from "../../../public/vectorIllustrations/AuthPage.svg";
+import AuthPage from '../../../../public/vectorIllustrations/AuthPage.svg'
 const AuthLayoutLeftSection = () => {
   return (
     <div className="bg-gray-200 flex justify-center items-center">

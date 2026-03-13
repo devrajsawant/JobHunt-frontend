@@ -1,5 +1,5 @@
+import Navbar from "@/app/components/navbar";
 import React, { ReactNode } from "react";
-import Navbar from "../components/navbar";
 type AuthLayoutProps = {
   children: ReactNode;
 };

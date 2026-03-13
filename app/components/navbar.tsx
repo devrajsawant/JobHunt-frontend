@@ -62,7 +62,7 @@ const Navbar = () => {
         <div className="relative">
           {/* Avatar */}
           <button
-            onClick={() => setEmployeeDropdownOpen(!open)}
+            onClick={() => setEmployeeDropdownOpen(!employeeDropdownOpen)}
             className="bg-zinc-700 px-3 py-1 rounded-md text-white flex items-center justify-center"
           >
             For Employeer

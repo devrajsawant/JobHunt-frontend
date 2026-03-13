@@ -1,10 +1,10 @@
 import Image from "next/image";
 import React from "react";
-import userFallback from "../../public/userFallback.png";
-import Navbar from "../components/navbar";
+import userFallback from '../../../public/userFallback.png'
 
 import { Github, Linkedin, Twitter, Globe, ExternalLink } from "lucide-react";
 import Link from "next/link";
+import Navbar from "@/app/components/navbar";
 
 const Page = () => {
   const user = {

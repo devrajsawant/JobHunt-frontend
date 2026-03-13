@@ -7,7 +7,7 @@ type JobProps = {
   salary: string;
 };
 
-const JobCard = (job: JobProps) => {
+const JobCard = ({job}: JobProps) => {
   return (
     <div className="border rounded-lg p-4 hover:bg-gray-50 cursor-pointer">
       <h3 className="font-semibold text-lg text-gray-900">{job.title}</h3>
