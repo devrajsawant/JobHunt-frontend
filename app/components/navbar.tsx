@@ -4,7 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 
 const Navbar = () => {
-  const isLoggedIn = true; // dummy variable for now
+  const isLoggedIn = false; // dummy variable for now
   const [open, setOpen] = useState(false);
   const [employeeDropdownOpen, setEmployeeDropdownOpen] = useState(false);
 
@@ -63,7 +63,7 @@ const Navbar = () => {
           {/* Avatar */}
           <button
             onClick={() => setEmployeeDropdownOpen(!employeeDropdownOpen)}
-            className="bg-zinc-700 px-3 py-1 rounded-md text-white flex items-center justify-center"
+            className="bg-zinc-800 px-3 rounded-sm text-white flex items-center justify-center"
           >
             For Employeer
           </button>

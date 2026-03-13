@@ -7,8 +7,10 @@ export default function Home() {
   return (
     <>
       <Navbar />
-      <GlobalSearchBar />
-      <GlobalFilters />
+      <div className="mb-2 border-b pb-2">
+        <GlobalSearchBar />
+        <GlobalFilters />
+      </div>
       <MainFeed />
     </>
   );
