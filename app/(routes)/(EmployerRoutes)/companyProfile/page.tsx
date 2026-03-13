@@ -8,6 +8,7 @@ import userFallback from "../../../../public/userFallback.png";
 import CompanyAbout from "@/app/components/companyProfile/companyAbout";
 import CompanyJobs from "@/app/components/companyProfile/companyJobs";
 import CompanyReviews from "@/app/components/companyProfile/companyReview";
+import Link from "next/link";
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState("about");
@@ -21,48 +22,65 @@ const Page = () => {
   };
 
   const tabs = [
-  { id: "about", label: "About Company" },
-  { id: "jobs", label: "Jobs" },
-  { id: "reviews", label: "Reviews" },
-];
+    { id: "about", label: "About Company" },
+    { id: "jobs", label: "Jobs" },
+    { id: "reviews", label: "Reviews" },
+  ];
 
   return (
     <div className="max-w-5xl mx-auto p-6">
       {/* Company Banner */}
-      <div className="rounded-xl p-6 flex items-center gap-6">
-        <Image
-          src={company.logo}
-          className="w-20 h-20 rounded-lg"
-          height={200}
-          width={200}
-          alt="company pfp"
-        />
+      <div className="flex justify-between">
+        <div className="rounded-xl p-6 flex items-center gap-6">
+          <Image
+            src={company.logo}
+            className="w-20 h-20 rounded-lg"
+            height={200}
+            width={200}
+            alt="company pfp"
+          />
 
-        <div className="flex flex-col">
-          <h1 className="text-4xl font-bold text-gray-800">{company.name}</h1>
-          <p className="text-gray-500 text-xl font-semibold">
-            {company.location}
-          </p>
+          <div className="flex flex-col">
+            <h1 className="text-4xl font-bold text-gray-800">{company.name}</h1>
+            <p className="text-gray-500 text-xl font-semibold">
+              {company.location}
+            </p>
 
-          {/* Rating */}
-          <div className="flex items-center gap-1 text-yellow-500 mt-1">
-            {[...Array(5)].map((_, i) => (
-              <Star
-                key={i}
-                size={20}
-                className={`${
-                  i < company.rating ? "text-yellow-500" : "text-gray-400"
-                }`}
-              />
-            ))}
+            {/* Rating */}
+            <div className="flex items-center gap-1 text-yellow-500 mt-1">
+              {[...Array(5)].map((_, i) => (
+                <Star
+                  key={i}
+                  size={20}
+                  className={`${
+                    i < company.rating ? "text-yellow-500" : "text-gray-400"
+                  }`}
+                />
+              ))}
 
-            <span className="text-gray-600 text-md ml-2">
-              {company.ratingValue} Rating
-            </span>
+              <span className="text-gray-600 text-md ml-2">
+                {company.ratingValue} Rating
+              </span>
+            </div>
           </div>
         </div>
-      </div>
+        <div className="p-6 flex gap-4">
+          <Link
+            href="/companyProfile/edit"
+            className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
+          >
+            {" "}
+            Edit Details
+          </Link>
 
+          <Link
+            href="/jobPosting"
+            className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
+          >
+            Create new job
+          </Link>
+        </div>
+      </div>
       {/* Tabs */}
       <div className="flex gap-8 border-b mt-8">
         {tabs.map((tab) => (
