@@ -2,12 +2,13 @@
 
 import Link from "next/link";
 import { useState } from "react";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 
 const Navbar = () => {
-  const isLoggedIn = false; // dummy variable for now
   const [open, setOpen] = useState(false);
   const [employeeDropdownOpen, setEmployeeDropdownOpen] = useState(false);
-
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
   return (
     <div className="flex justify-between px-10 items-center py-3 border-b bg-gray-200">
       <p className="text-3xl font-serif font-medium">

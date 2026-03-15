@@ -1,47 +1,13 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/app/components/navbar";
 
-type FormData = {
-  name: string;
-  email: string;
-  phone: string;
-  location: string;
-  employmentStatus: string;
-
-  socials: {
-    github: string;
-    linkedin: string;
-    twitter: string;
-    portfolio: string;
-  };
-
-  skills: string[];
-
-  education: {
-    degree: string;
-    institute: string;
-    year: string;
-  };
-
-  experience: {
-    position: string;
-    company: string;
-    location: string;
-    duration: string;
-  }[];
-
-  projects: {
-    title: string;
-    description: string;
-    demoLink: string;
-    github: string;
-  }[];
-};
+import { Profile } from "@/types/profile";
+import { useProfile, useUpdateProfile } from "@/hooks/useProfile";
 
 const Page = () => {
   const router = useRouter();
@@ -49,49 +15,17 @@ const Page = () => {
   const [skillInput, setSkillInput] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
 
-  const { register, handleSubmit, control, setValue, watch } =
-    useForm<FormData>({
-      defaultValues: {
-        name: "Devraj Sawant",
-        email: "devraj@gmail.com",
-        phone: "+91 9876543210",
-        location: "Mumbai, India",
-        employmentStatus: "Open to Work",
+  const { data: profile, isLoading } = useProfile();
+  const { mutate, isPending } = useUpdateProfile();
 
-        socials: {
-          github: "https://github.com/devraj",
-          linkedin: "https://linkedin.com/in/devraj",
-          twitter: "https://twitter.com/devraj",
-          portfolio: "https://devraj.dev",
-        },
+  const { register, handleSubmit, control, setValue, watch, reset } =
+    useForm<Profile>();
 
-        skills: ["React", "TypeScript", "Tailwind", "Node.js"],
-
-        education: {
-          degree: "B.Tech in Computer Science",
-          institute: "Mumbai University",
-          year: "2019 - 2023",
-        },
-
-        experience: [
-          {
-            position: "Frontend Developer",
-            company: "Google",
-            location: "Mumbai",
-            duration: "2023 - Present",
-          },
-        ],
-
-        projects: [
-          {
-            title: "Job Portal",
-            description: "A platform for job seekers",
-            demoLink: "",
-            github: "",
-          },
-        ],
-      },
-    });
+  useEffect(() => {
+    if (profile) {
+      reset(profile);
+    }
+  }, [profile, reset]);
 
   const {
     fields: expFields,
@@ -111,7 +45,7 @@ const Page = () => {
     name: "projects",
   });
 
-  const skills = watch("skills");
+  const skills = watch("skills") || [];
 
   const addSkill = () => {
     if (!skillInput) return;
@@ -133,10 +67,25 @@ const Page = () => {
     setPreview(url);
   };
 
-  const onSubmit = (data: FormData) => {
-    console.log("Saved Data:", data);
-    router.push("/profile");
+  const onSubmit = (data: Profile) => {
+    mutate(data, {
+      onSuccess: () => {
+        router.push("/profile");
+      },
+      onError: (error: any) => {
+        console.log(error.response?.data?.message);
+      },
+    });
   };
+
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-6">Loading profile...</div>
+      </>
+    );
+  }
 
   return (
     <>
@@ -175,16 +124,13 @@ const Page = () => {
                 className="border p-2 rounded"
                 placeholder="Name"
               />
+
               <input
                 {...register("location")}
                 className="border p-2 rounded"
                 placeholder="Location"
               />
-              <input
-                {...register("email")}
-                className="border p-2 rounded"
-                placeholder="Email"
-              />
+
               <input
                 {...register("phone")}
                 className="border p-2 rounded"
@@ -362,9 +308,10 @@ const Page = () => {
           <div className="flex gap-3 pt-4">
             <button
               type="submit"
+              disabled={isPending}
               className="bg-gray-800 text-white px-4 py-2 rounded"
             >
-              Save
+              {isPending ? "Saving..." : "Save"}
             </button>
 
             <button

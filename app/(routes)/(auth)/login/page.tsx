@@ -7,6 +7,8 @@ import toast from "react-hot-toast";
 import { useLogin } from "@/hooks/useAuth";
 import { LoginForm } from "@/types/auth";
 import { loginValidation } from "@/validation/authValidation";
+import { useDispatch } from "react-redux";
+import { login } from "@/store/authSlice";
 
 const Page = () => {
   const {
@@ -18,10 +20,11 @@ const Page = () => {
 
   const { mutate, isPending } = useLogin();
   const router = useRouter();
-
+  const dispatch = useDispatch();
   const onSubmit = (data: LoginForm) => {
     mutate(data, {
       onSuccess: () => {
+        dispatch(login());
         toast.success("Login successful");
         reset();
         router.push("/feed");

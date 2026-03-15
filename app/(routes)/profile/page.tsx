@@ -1,68 +1,37 @@
+"use client";
+
 import Image from "next/image";
 import React from "react";
-import userFallback from '../../../public/userFallback.png'
+import userFallback from "../../../public/userFallback.png";
 
 import { Github, Linkedin, Twitter, Globe, ExternalLink } from "lucide-react";
 import Link from "next/link";
 import Navbar from "@/app/components/navbar";
+import { useProfile } from "@/hooks/useProfile";
 
 const Page = () => {
-  const user = {
-    name: "Devraj Sawant",
-    email: "devraj@gmail.com",
-    phone: "+91 9876543210",
-    location: "Mumbai, India",
-    employmentStatus: "Open to Work",
+  const { data: user, isLoading, error } = useProfile();
+  if (isLoading) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-6 text-center">Loading profile...</div>
+      </>
+    );
+  }
 
-    socials: {
-      github: "https://github.com/devraj",
-      linkedin: "https://linkedin.com/in/devraj",
-      twitter: "https://twitter.com/devraj",
-      portfolio: "https://devraj.dev",
-    },
+  if (error) {
+    return (
+      <>
+        <Navbar />
+        <div className="p-6 text-center text-red-500">
+          Failed to load profile
+        </div>
+      </>
+    );
+  }
 
-    skills: ["React", "TypeScript", "Tailwind", "Node.js"],
-
-    education: {
-      degree: "B.Tech in Computer Science",
-      institute: "Mumbai University",
-      year: "2019 - 2023",
-    },
-
-    experience: [
-      {
-        position: "Frontend Developer",
-        company: "Google",
-        location: "Mumbai",
-        duration: "2023 - Present",
-      },
-      {
-        position: "React Developer Intern",
-        company: "StartupX",
-        location: "Remote",
-        duration: "2022 - 2023",
-      },
-    ],
-
-    projects: [
-      {
-        title: "Job Portal",
-        description: "A platform for job seekers to discover opportunities",
-        demoImage: "/projectDemo.png",
-        demoLink: "https://jobportal.com",
-        github: "https://github.com/devraj/jobportal",
-        skills: ["React", "Node", "MongoDB"],
-      },
-      {
-        title: "Portfolio Website",
-        description: "Personal developer portfolio",
-        demoImage: "/projectDemo.png",
-        demoLink: "https://portfolio.com",
-        github: "https://github.com/devraj/portfolio",
-        skills: ["Next.js", "Tailwind"],
-      },
-    ],
-  };
+  if (!user) return null;
 
   return (
     <>
@@ -70,10 +39,9 @@ const Page = () => {
 
       <div className="max-w-6xl mx-auto px-6 py-5 flex flex-col items-end gap-2">
         <button className="border px-3 py-1 rounded-sm items-end w-fit bg-gray-800 text-gray-300 cursor-pointer">
-            <Link href="/profile/edit">
-            Edit Profile
-            </Link>
+          <Link href="/profile/edit">Edit Profile</Link>
         </button>
+
         <div className="grid grid-cols-12 gap-10">
           {/* LEFT SIDE */}
           <div className="col-span-4 border-r pr-6">
@@ -99,7 +67,7 @@ const Page = () => {
 
             {/* CONTACT */}
             <div className="my-4">
-              <p>
+              {/* <p> - email section
                 <span className="font-medium text-gray-700 text-md">
                   Email:
                 </span>
@@ -107,7 +75,7 @@ const Page = () => {
                 <span className="text-gray-800 ml-1 text-md font-semibold">
                   {user.email}
                 </span>
-              </p>
+              </p> */}
 
               <p className="my-2">
                 <span className="font-medium text-gray-700 text-md">
@@ -121,7 +89,7 @@ const Page = () => {
             </div>
 
             {/* SOCIALS */}
-            <div className="my-4">
+            {/* <div className="my-4">
               <h2 className="font-medium text-gray-700 text-md">Socials</h2>
 
               <div className="flex gap-4 mt-2">
@@ -141,14 +109,14 @@ const Page = () => {
                   <Globe className="w-5 h-5 text-gray-700 hover:text-green-600" />
                 </a>
               </div>
-            </div>
+            </div> */}
 
             {/* SKILLS */}
             <div className="my-4">
               <h2 className="font-medium text-gray-700 text-md">Skills</h2>
 
               <div className="flex flex-wrap gap-2 mt-2">
-                {user.skills.map((skill, index) => (
+                {user.skills?.map((skill, index) => (
                   <span
                     key={index}
                     className="px-2 py-1 bg-gray-200 text-sm rounded-md"
@@ -164,14 +132,14 @@ const Page = () => {
               <h2 className="font-medium text-gray-700 text-md">Education</h2>
 
               <p className="font-semibold text-gray-800">
-                {user.education.degree}
+                {user.education?.degree}
               </p>
 
               <p className="text-gray-600 text-sm">
-                {user.education.institute}
+                {user.education?.institute}
               </p>
 
-              <p className="text-gray-500 text-sm">{user.education.year}</p>
+              <p className="text-gray-500 text-sm">{user.education?.year}</p>
             </div>
           </div>
 
@@ -182,7 +150,7 @@ const Page = () => {
               <h2 className="text-lg font-semibold mb-4">Experience</h2>
 
               <div className="space-y-5">
-                {user.experience.map((exp, index) => (
+                {user.experience?.map((exp, index) => (
                   <div key={index} className="flex justify-between">
                     <div>
                       <h3 className="font-semibold text-gray-900">
@@ -209,7 +177,7 @@ const Page = () => {
               <h2 className="text-lg font-semibold mb-4">Projects</h2>
 
               <div className="space-y-6">
-                {user.projects.map((project, index) => (
+                {user.projects?.map((project, index) => (
                   <div key={index} className="flex gap-4">
                     <Image
                       src={userFallback}
@@ -243,8 +211,8 @@ const Page = () => {
                       <p className="text-sm text-gray-600 mt-1">
                         {project.description}
                       </p>
-
-                      <div className="flex gap-2 mt-2 flex-wrap">
+                      {/* project skills */}
+                      {/* <div className="flex gap-2 mt-2 flex-wrap">
                         {project.skills.map((skill, i) => (
                           <span
                             key={i}
@@ -253,7 +221,7 @@ const Page = () => {
                             {skill}
                           </span>
                         ))}
-                      </div>
+                      </div> */}
                     </div>
                   </div>
                 ))}
