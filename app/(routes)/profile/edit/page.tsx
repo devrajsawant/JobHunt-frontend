@@ -45,6 +45,15 @@ const Page = () => {
     name: "projects",
   });
 
+  const {
+    fields: eduFields,
+    append: addEdu,
+    remove: removeEdu,
+  } = useFieldArray({
+    control,
+    name: "education",
+  });
+
   const skills = watch("skills") || [];
 
   const addSkill = () => {
@@ -189,6 +198,58 @@ const Page = () => {
             </div>
           </div>
 
+          {/* EDUCATION */}
+          <div>
+            <h2 className="font-semibold mb-3">Education</h2>
+
+            {eduFields.map((field, index) => (
+              <div
+                key={field.id}
+                className="grid grid-cols-3 gap-3 mb-3 border p-3 rounded"
+              >
+                <input
+                  {...register(`education.${index}.degree`)}
+                  placeholder="Degree"
+                  className="border p-2 rounded"
+                />
+
+                <input
+                  {...register(`education.${index}.institute`)}
+                  placeholder="Institute"
+                  className="border p-2 rounded"
+                />
+
+                <input
+                  {...register(`education.${index}.year`)}
+                  placeholder="Year"
+                  className="border p-2 rounded"
+                />
+
+                <button
+                  type="button"
+                  onClick={() => removeEdu(index)}
+                  className="text-red-500 text-sm col-span-3"
+                >
+                  Remove
+                </button>
+              </div>
+            ))}
+
+            <button
+              type="button"
+              onClick={() =>
+                addEdu({
+                  degree: "",
+                  institute: "",
+                  year: "",
+                })
+              }
+              className="text-sm text-blue-600"
+            >
+              + Add Education
+            </button>
+          </div>
+
           {/* EXPERIENCE */}
           <div>
             <h2 className="font-semibold mb-3">Experience</h2>
@@ -260,7 +321,7 @@ const Page = () => {
                   className="border p-2 rounded w-full"
                 />
 
-                <input
+                <textarea
                   {...register(`projects.${index}.description`)}
                   placeholder="Description"
                   className="border p-2 rounded w-full"

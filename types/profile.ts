@@ -24,7 +24,7 @@ export type Profile = {
   location: string;
   employmentStatus: string;
   skills: string[];
-  education: Education;
+  education: Education[];
   experience: Experience[];
   projects: Project[];
 };

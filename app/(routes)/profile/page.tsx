@@ -113,7 +113,7 @@ const Page = () => {
 
             {/* SKILLS */}
             <div className="my-4">
-              <h2 className="font-medium text-gray-700 text-md">Skills</h2>
+              <h2 className="font-semibold text-gray-700 text-lg">Skills</h2>
 
               <div className="flex flex-wrap gap-2 mt-2">
                 {user.skills?.map((skill, index) => (
@@ -129,17 +129,17 @@ const Page = () => {
 
             {/* EDUCATION */}
             <div className="my-4">
-              <h2 className="font-medium text-gray-700 text-md">Education</h2>
+              <h2 className="font-semibold text-gray-700 text-lg">Education</h2>
 
-              <p className="font-semibold text-gray-800">
-                {user.education?.degree}
-              </p>
+              {user.education?.map((edu, index) => (
+                <div key={index} className="mt-2">
+                  <p className="font-semibold text-gray-800">{edu.degree}</p>
 
-              <p className="text-gray-600 text-sm">
-                {user.education?.institute}
-              </p>
+                  <p className="text-gray-600 text-sm">{edu.institute}</p>
 
-              <p className="text-gray-500 text-sm">{user.education?.year}</p>
+                  <p className="text-gray-500 text-sm">{edu.year}</p>
+                </div>
+              ))}
             </div>
           </div>
 
