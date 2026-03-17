@@ -179,13 +179,13 @@ const Page = () => {
               <div className="space-y-6">
                 {user.projects?.map((project, index) => (
                   <div key={index} className="flex gap-4">
-                    <Image
+                    {/* <Image
                       src={userFallback}
                       alt={project.title}
                       width={100}
                       height={100}
                       className="rounded-md object-cover"
-                    />
+                    /> */}
 
                     <div className="flex-1">
                       <div className="flex items-center gap-3">

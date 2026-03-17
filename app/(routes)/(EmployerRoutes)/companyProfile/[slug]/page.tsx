@@ -3,23 +3,23 @@ import Image from "next/image";
 import React, { useState } from "react";
 import { Star } from "lucide-react";
 
-import userFallback from "../../../../public/userFallback.png";
+import userFallback from "../../../../../public/userFallback.png";
 
 import CompanyAbout from "@/app/components/companyProfile/companyAbout";
 import CompanyJobs from "@/app/components/companyProfile/companyJobs";
 import CompanyReviews from "@/app/components/companyProfile/companyReview";
 import Link from "next/link";
+import { useParams } from "next/navigation";
+import { useCompany } from "@/hooks/useCompany";
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState("about");
 
-  const company = {
-    name: "Google",
-    location: "Mountain View, California",
-    rating: 4,
-    ratingValue: 4.2,
-    logo: userFallback,
-  };
+  const params = useParams();
+  const slug = params.slug as string;
+  const { data: company, isLoading } = useCompany(slug);
+  console.log(company, "--- company details");
+  if (isLoading) return <p>Loading...</p>;
 
   const tabs = [
     { id: "about", label: "About Company" },
@@ -32,13 +32,13 @@ const Page = () => {
       {/* Company Banner */}
       <div className="flex justify-between">
         <div className="rounded-xl p-6 flex items-center gap-6">
-          <Image
+          {/* <Image
             src={company.logo}
             className="w-20 h-20 rounded-lg"
             height={200}
             width={200}
             alt="company pfp"
-          />
+          /> */}
 
           <div className="flex flex-col">
             <h1 className="text-4xl font-bold text-gray-800">{company.name}</h1>
@@ -66,7 +66,7 @@ const Page = () => {
         </div>
         <div className="p-6 flex gap-4">
           <Link
-            href="/companyProfile/edit"
+            href={`/companyProfile/${slug}/edit`}
             className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
           >
             {" "}
@@ -100,7 +100,7 @@ const Page = () => {
 
       {/* Tab Body */}
       <div className="mt-6">
-        {activeTab === "about" && <CompanyAbout />}
+        {activeTab === "about" && <CompanyAbout data={company} />}
         {activeTab === "jobs" && <CompanyJobs />}
         {activeTab === "reviews" && <CompanyReviews />}
       </div>

@@ -1,34 +1,41 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
 import Image from "next/image";
-import { useRouter } from "next/navigation";
-
-type CompanyForm = {
-  name: string;
-  location: string;
-  industry: string;
-  size: string;
-  website: string;
-  description: string;
-};
+import { useRouter, useParams } from "next/navigation";
+import { useCompany, useUpdateCompany } from "@/hooks/useCompany";
+import { CompanyForm } from "@/types/company";
 
 const Page = () => {
   const router = useRouter();
+  const params = useParams();
+  const slug = params.slug as string;
+  const { mutate } = useUpdateCompany();
+
+  const { data: company, isLoading } = useCompany(slug);
+
   const [preview, setPreview] = useState<string | null>(null);
 
-  const { register, handleSubmit } = useForm<CompanyForm>({
-    defaultValues: {
-      name: "Google",
-      location: "Mountain View, California",
-      industry: "Technology",
-      size: "10,000+ Employees",
-      website: "https://google.com",
-      description:
-        "Google is a global technology company focused on search engine technology, artificial intelligence, cloud computing, and advertising platforms.",
-    },
-  });
+  const { register, handleSubmit, reset } = useForm<CompanyForm>();
+
+  useEffect(() => {
+    if (company) {
+      reset({
+        name: company.name,
+        location: company.location,
+        industry: company.industry,
+        size: company.size,
+        website: company.website,
+        description: company.description,
+      });
+
+      // optional: set existing logo preview
+      // if (company.logo) {
+      //   setPreview(company.logo);
+      // }
+    }
+  }, [company, reset]);
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
@@ -39,12 +46,17 @@ const Page = () => {
   };
 
   const onSubmit = (data: CompanyForm) => {
-    console.log("Updated Company:", data);
-
-    // later call API here
-
-    router.push("/companyProfile");
+    mutate(
+      { slug, data },
+      {
+        onSuccess: () => {
+          router.push(`/companyProfile/${slug}`);
+        },
+      },
+    );
   };
+
+  if (isLoading) return <p>Loading...</p>;
 
   return (
     <div className="max-w-4xl mx-auto p-6">
@@ -75,21 +87,12 @@ const Page = () => {
           <h2 className="font-semibold mb-3">Basic Information</h2>
 
           <div className="grid grid-cols-2 gap-4">
-            <input
-              {...register("name")}
-              placeholder="Company Name"
-              className="border p-2 rounded"
-            />
-
-            <input
-              {...register("location")}
-              placeholder="Location"
-              className="border p-2 rounded"
-            />
+            <input {...register("name")} className="border p-2 rounded" />
+            <input {...register("location")} className="border p-2 rounded" />
           </div>
         </div>
 
-        {/* ABOUT SECTION */}
+        {/* ABOUT */}
         <div>
           <h2 className="font-semibold mb-3">About Company</h2>
 
@@ -97,30 +100,18 @@ const Page = () => {
             {...register("description")}
             rows={4}
             className="border p-2 rounded w-full"
-            placeholder="Company description"
           />
         </div>
 
-        {/* COMPANY DETAILS */}
+        {/* DETAILS */}
         <div>
           <h2 className="font-semibold mb-3">Company Details</h2>
 
           <div className="grid grid-cols-2 gap-4">
-            <input
-              {...register("industry")}
-              placeholder="Industry"
-              className="border p-2 rounded"
-            />
-
-            <input
-              {...register("size")}
-              placeholder="Company Size"
-              className="border p-2 rounded"
-            />
-
+            <input {...register("industry")} className="border p-2 rounded" />
+            <input {...register("size")} className="border p-2 rounded" />
             <input
               {...register("website")}
-              placeholder="Website"
               className="border p-2 rounded col-span-2"
             />
           </div>
@@ -137,7 +128,7 @@ const Page = () => {
 
           <button
             type="button"
-            onClick={() => router.push("/companyProfile")}
+            onClick={() => router.push(`/companyProfile/${slug}`)}
             className="border px-4 py-2 rounded"
           >
             Cancel

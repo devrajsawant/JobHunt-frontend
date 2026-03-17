@@ -9,6 +9,8 @@ import { LoginForm } from "@/types/auth";
 import { loginValidation } from "@/validation/authValidation";
 import { useDispatch } from "react-redux";
 import { login } from "@/store/authSlice";
+import { useState } from "react";
+import { Eye, EyeOff } from "lucide-react";
 
 const Page = () => {
   const {
@@ -17,14 +19,15 @@ const Page = () => {
     reset,
     formState: { errors },
   } = useForm<LoginForm>();
+  const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending } = useLogin();
   const router = useRouter();
   const dispatch = useDispatch();
   const onSubmit = (data: LoginForm) => {
     mutate(data, {
-      onSuccess: () => {
-        dispatch(login());
+      onSuccess: (res) => {
+        dispatch(login(res));
         toast.success("Login successful");
         reset();
         router.push("/feed");
@@ -52,13 +55,19 @@ const Page = () => {
         </div>
 
         {/* Password */}
-        <div className="my-3">
+        <div className="my-3 relative">
           <p className="text-xl font-mono">Password</p>
           <input
-            type="password"
+            type={showPassword ? "text" : "password"}
             {...register("password", loginValidation.password)}
             className="w-md h-8 border rounded-sm outline-none px-2 py-1"
           />
+          <span
+            className="absolute right-3 top-9 cursor-pointer"
+            onClick={() => setShowPassword(!showPassword)}
+          >
+            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+          </span>
           {errors.password && (
             <p className="text-red-500 text-sm">{errors.password.message}</p>
           )}
