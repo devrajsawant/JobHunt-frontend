@@ -1,12 +1,14 @@
 "use client";
 
-import React, { useState } from "react";
+import { useState } from "react";
 import { useForm } from "react-hook-form";
-import Navbar from "@/app/components/navbar";
-
+import { useParams } from "next/navigation";
+import { useRouter } from "next/navigation";
+import { useCreateJob } from "@/hooks/useJobs";
+import toast from "react-hot-toast";
+import { useCompany } from "@/hooks/useCompany";
 type JobForm = {
   title: string;
-  company: string;
   workMode: string;
   experience: string;
   location: string;
@@ -16,10 +18,14 @@ type JobForm = {
 };
 
 const Page = () => {
+  const { slug } = useParams();
+  const router = useRouter();
+  const { mutate } = useCreateJob();
+  const { data: company } = useCompany(slug as string);
+  console.log(slug);
   const { register, handleSubmit, setValue, watch } = useForm<JobForm>({
     defaultValues: {
       title: "",
-      company: "",
       workMode: "onSite",
       experience: "",
       location: "",
@@ -45,7 +51,25 @@ const Page = () => {
   };
 
   const onSubmit = (data: JobForm) => {
-    console.log("Job Posted:", data);
+    if (!company?._id) {
+      toast.error("Company not loaded yet");
+      return;
+    }
+
+    const payload = {
+      ...data,
+      company: company._id,
+    };
+
+    mutate(payload, {
+      onSuccess: () => {
+        toast.success("Job posted successfully");
+        router.push(`/companyProfile/${slug}`);
+      },
+      onError: (error: any) => {
+        toast.error(error?.response?.data?.message || "Failed to post job");
+      },
+    });
   };
 
   return (
@@ -64,15 +88,6 @@ const Page = () => {
                 <input
                   {...register("title")}
                   placeholder="Frontend Developer"
-                  className="border p-2 rounded"
-                />
-              </div>
-
-              <div className="flex flex-col gap-1">
-                <label className="text-sm font-medium">Company Name</label>
-                <input
-                  {...register("company")}
-                  placeholder="Google"
                   className="border p-2 rounded"
                 />
               </div>

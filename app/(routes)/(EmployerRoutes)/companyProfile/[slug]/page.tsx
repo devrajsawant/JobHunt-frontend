@@ -74,7 +74,7 @@ const Page = () => {
           </Link>
 
           <Link
-            href="/jobPosting"
+            href={`/companyProfile/${slug}/jobPosting`}
             className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
           >
             Create new job

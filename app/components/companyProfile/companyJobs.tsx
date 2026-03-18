@@ -1,36 +1,25 @@
+"use client"; // client component for react-query hooks
+
 import React from "react";
 import JobCard from "../common/jobCard";
-
-const jobs = [
-  {
-    title: "Frontend Developer",
-    company: "Google",
-    location: "Remote",
-    experience: "1-3 years",
-    salary: "30k/month",
-  },
-  {
-    title: "Backend Developer",
-    company: "Google",
-    location: "Bangalore",
-    experience: "2-4 years",
-    salary: "40k/month",
-  },
-  {
-    title: "Full Stack Developer",
-    company: "Google",
-    location: "Mumbai",
-    experience: "2-5 years",
-    salary: "45k/month",
-  },
-];
+import { useParams } from "next/navigation";
+import { useCompanyJobs } from "@/hooks/useCompany";
 
 const CompanyJobs = () => {
+  const params = useParams();
+  const { slug } = params;
+  const { data: jobs, isLoading, isError } = useCompanyJobs(slug);
+
+  if (isLoading) return <div>Loading jobs...</div>;
+  if (isError) return <div>Failed to load jobs.</div>;
+
   return (
     <div className="grid grid-cols-2 gap-4">
-      {jobs.map((job, index) => (
-        <JobCard key={index} job={job} />
-      ))}
+      {jobs && jobs.length > 0 ? (
+        jobs.map((job) => <JobCard key={job._id} job={job} />)
+      ) : (
+        <div>No jobs found</div>
+      )}
     </div>
   );
 };

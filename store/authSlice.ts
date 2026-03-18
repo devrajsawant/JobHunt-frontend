@@ -4,17 +4,17 @@ interface AuthState {
   isLoggedIn: boolean;
   user: any | null;
   company: any | null;
-}
+} // this is the type
 
 const initialState: AuthState = {
   isLoggedIn: false,
   user: null,
   company: null,
-};
+}; // initial stage
 
 const authSlice = createSlice({
-  name: "auth",
-  initialState,
+  name: "auth", // name of the slice
+  initialState, // initial state
   reducers: {
     login: (state, action) => {
       state.isLoggedIn = true;

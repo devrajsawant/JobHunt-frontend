@@ -6,6 +6,7 @@ import Image from "next/image";
 import { useRouter, useParams } from "next/navigation";
 import { useCompany, useUpdateCompany } from "@/hooks/useCompany";
 import { CompanyForm } from "@/types/company";
+import toast from "react-hot-toast";
 
 const Page = () => {
   const router = useRouter();
@@ -50,6 +51,7 @@ const Page = () => {
       { slug, data },
       {
         onSuccess: () => {
+          toast.success("Company details updated successfully")
           router.push(`/companyProfile/${slug}`);
         },
       },

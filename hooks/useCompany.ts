@@ -1,8 +1,9 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCompanyBySlug, updateCompany } from "@/api/companyApi";
+import { getCompanyBySlug, getCompanyJobs, updateCompany } from "@/api/companyApi";
 import { useMutation } from "@tanstack/react-query";
 import { createCompany } from "@/api/companyApi";
 import { CompanyForm } from "@/types/company";
+import { Job } from "@/types/job";
 
 export const useCompany = (slug: string) => {
   return useQuery({
@@ -22,5 +23,14 @@ export const useUpdateCompany = () => {
   return useMutation({
     mutationFn: ({ slug, data }: { slug: string; data: CompanyForm }) =>
       updateCompany(slug, data),
+  });
+};
+
+export const useCompanyJobs = (slug: string) => {
+  return useQuery<Job[]>({
+    queryKey: ["companyJobs", slug],
+    queryFn: () => getCompanyJobs(slug),
+    enabled: !!slug, // only fetch if slug is truthy
+    staleTime: 1000 * 60, // 1 min caching
   });
 };
