@@ -22,7 +22,6 @@ const Page = () => {
   const router = useRouter();
   const { mutate } = useCreateJob();
   const { data: company } = useCompany(slug as string);
-  console.log(slug);
   const { register, handleSubmit, setValue, watch } = useForm<JobForm>({
     defaultValues: {
       title: "",

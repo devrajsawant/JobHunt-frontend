@@ -1,11 +1,9 @@
 "use client"
-import React from "react";
 import JobCard from "../common/jobCard";
 import { useJobs } from "@/hooks/useJobs"; // adjust path
 
 const FeedJobsList = () => {
   const { data: jobs, isLoading, isError } = useJobs();
-  console.log(jobs,"----")
   if (isLoading) return <div>Loading jobs...</div>;
   if (isError) return <div>Failed to load jobs.</div>;
 

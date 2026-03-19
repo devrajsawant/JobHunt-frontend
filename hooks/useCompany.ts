@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getCompanyBySlug, getCompanyJobs, updateCompany } from "@/api/companyApi";
+import { getCompanyById, getCompanyBySlug, getCompanyJobs, updateCompany } from "@/api/companyApi";
 import { useMutation } from "@tanstack/react-query";
 import { createCompany } from "@/api/companyApi";
 import { CompanyForm } from "@/types/company";
@@ -10,6 +10,14 @@ export const useCompany = (slug: string) => {
     queryKey: ["company", slug],
     queryFn: () => getCompanyBySlug(slug),
     enabled: !!slug,
+  });
+};
+
+export const useCompanyById = (id: string) => {
+  return useQuery({
+    queryKey: ["company", id],
+    queryFn: () => getCompanyById(id),
+    enabled: !!id,
   });
 };
 

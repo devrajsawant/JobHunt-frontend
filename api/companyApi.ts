@@ -7,6 +7,11 @@ export const getCompanyBySlug = async (slug: string) => {
   return res.data;
 };
 
+export const getCompanyById = async (id: string) => {
+  const res = await api.get(`/companies/id/${id}`);
+  return res.data;
+};
+
 export const createCompany = async (data: CompanyForm) => {
   const res = await api.post("/companies", data);
   return res.data;

@@ -18,7 +18,6 @@ const Page = () => {
   const params = useParams();
   const slug = params.slug as string;
   const { data: company, isLoading } = useCompany(slug);
-  console.log(company, "--- company details");
   if (isLoading) return <p>Loading...</p>;
 
   const tabs = [

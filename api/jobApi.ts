@@ -8,6 +8,10 @@ export const createJob = async (data: JobForm) => {
 
 export const getAllJobs = async (): Promise<Job[]> => {
   const res = await api.get("/jobs");
-  console.log(res,"--- res[ponse")
   return res.data.jobs;
+};
+
+export const getJobById = async (id: string): Promise<Job> => {
+  const res = await api.get(`/jobs/${id}`);
+  return res.data.job;
 };
