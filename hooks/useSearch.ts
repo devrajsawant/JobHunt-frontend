@@ -1,5 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
-import { getSuggestions } from "@/api/searchApi";
+import { getSearchResults, getSuggestions } from "@/api/searchApi";
 
 export const useSearchSuggestions = (
   query: string,
@@ -10,5 +10,21 @@ export const useSearchSuggestions = (
     queryFn: () => getSuggestions(query, type),
     enabled: query.length >= 2,
     staleTime: 1000 * 60 * 5,
+  });
+};
+
+export const useSearchResults = (filters: {
+  position?: string;
+  location?: string;
+  experience?: string;
+}) => {
+  return useQuery({
+    queryKey: ["search-results", filters],
+    queryFn: () => getSearchResults(filters),
+    enabled: !!(
+      filters.position ||
+      filters.location ||
+      filters.experience
+    ),
   });
 };

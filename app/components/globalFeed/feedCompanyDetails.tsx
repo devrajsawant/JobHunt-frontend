@@ -2,8 +2,9 @@
 
 import { useCompanyById } from "@/hooks/useCompany";
 import { StarIcon } from "lucide-react";
+import Image from "next/image";
 import { useSearchParams } from "next/navigation";
-import React from "react";
+import selectJobFeed from "../../../public/vectorIllustrations/select-company-feed.svg";
 
 const FeedCompanyDetails = () => {
   const searchParams = useSearchParams();
@@ -29,12 +30,27 @@ const FeedCompanyDetails = () => {
     return stars;
   };
 
-  // 🔹 Loading state
+  // Loading state
   if (isLoading) return <div className="p-6">Loading company...</div>;
 
   // 🔹 Error state
-  if (isError || !company)
-    return <div className="p-6">Failed to load company.</div>;
+  if (isError) return <div className="p-6">Failed to load company.</div>;
+
+  if (!company)
+    return (
+      <div className=" h-full w-full flex items-center justify-center text-center">
+        <div>
+          <Image
+            src={selectJobFeed}
+            alt="Auth Page Svg"
+            height={200}
+            width={200}
+            className="mb-8 mx-auto"
+          />
+          select job to see company details
+        </div>
+      </div>
+    );
 
   return (
     <div className="p-6 space-y-3">

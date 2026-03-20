@@ -1,10 +1,10 @@
 "use client";
 
-import { MoveUpRight } from "lucide-react";
-import { useSearchParams } from "next/navigation";
-import React from "react";
 import { useJobById } from "@/hooks/useJobs";
-
+import { MoveUpRight } from "lucide-react";
+import Image from "next/image";
+import { useSearchParams } from "next/navigation";
+import selectJobFeed from "../../../public/vectorIllustrations/select-job-feed.svg";
 const FeedJobDetails = () => {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
@@ -13,7 +13,21 @@ const FeedJobDetails = () => {
 
   if (isLoading) return <div>Loading job details...</div>;
   if (isError) return <div>Failed to load job.</div>;
-  if (!job) return <div>Job not found</div>;
+  if (!job)
+    return (
+      <div className=" h-full w-full flex items-center justify-center text-center">
+        <div>
+          <Image
+            src={selectJobFeed}
+            alt="Auth Page Svg"
+            height={300}
+            width={300}
+            className="mb-8 "
+          />
+          Please select a Job to see the details
+        </div>
+      </div>
+    );
 
   return (
     <div className="p-6">
