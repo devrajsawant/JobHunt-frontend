@@ -1,23 +1,24 @@
 "use client";
 
-import { useState } from "react";
 import { useDebounce } from "@/hooks/useDebounce";
 import { useSearchSuggestions } from "@/hooks/useSearch";
-import { useAppDispatch } from "@/store/hook";
-import { setSearchFilters } from "@/store/searchSlice";
 import { useRouter, useSearchParams } from "next/navigation";
+import { useState } from "react";
 
 const GlobalSearchBar = () => {
-  const [query, setQuery] = useState("");
-  const [location, setLocation] = useState("");
-  const [experience, setExperience] = useState("");
+  const router = useRouter();
+  const searchParams = useSearchParams();
+
+  // ✅ Initialize from URL (important for refresh / back button)
+  const [query, setQuery] = useState(searchParams.get("position") || "");
+  const [location, setLocation] = useState(searchParams.get("location") || "");
+  const [experience, setExperience] = useState(
+    searchParams.get("experience") || "",
+  );
+
   const [showExpDropdown, setShowExpDropdown] = useState(false);
   const [showJobDropdown, setShowJobDropdown] = useState(false);
   const [showLocationDropdown, setShowLocationDropdown] = useState(false);
-  const dispatch = useAppDispatch();
-
-  const router = useRouter();
-  const searchParams = useSearchParams();
 
   const debouncedQuery = useDebounce(query, 300);
   const debouncedLocation = useDebounce(location, 300);
@@ -137,22 +138,13 @@ const GlobalSearchBar = () => {
         <button
           className="px-6 py-2 bg-zinc-600 text-white rounded-md"
           onClick={() => {
-            const params = new URLSearchParams(searchParams.toString());
+            const params = new URLSearchParams();
 
-            // Remove unwanted params
-            params.delete("jobId");
-            params.delete("companyId");
+            if (query) params.set("position", query);
+            if (location) params.set("location", location);
+            if (experience) params.set("experience", experience);
 
             router.push(`?${params.toString()}`);
-
-            // Dispatch filters
-            dispatch(
-              setSearchFilters({
-                position: query,
-                location,
-                experience,
-              }),
-            );
           }}
         >
           Search

@@ -1,21 +1,26 @@
-"use client"
+"use client";
+
+import { useSearchParams } from "next/navigation";
 import { useSearchResults } from "@/hooks/useSearch";
 import { useJobs } from "@/hooks/useJobs";
-import { useAppSelector } from "@/store/hook";
 import JobCard from "../common/jobCard";
 
 const FeedJobsList = () => {
-  const { position, location, experience } = useAppSelector(
-    (state) => state.search,
-  );
+  const searchParams = useSearchParams();
 
-  const isSearching = position || location || experience;
+  const filters = {
+    position: searchParams.get("position") || "",
+    location: searchParams.get("location") || "",
+    experience: searchParams.get("experience") || "",
+    jobType: searchParams.get("jobType") || "",
+    salary: searchParams.get("salary") || "",
+    workMode: searchParams.get("workMode") || "",
+  };
 
-  const { data: searchJobs, isLoading: searchLoading } = useSearchResults({
-    position,
-    location,
-    experience,
-  });
+  const isSearching = Object.values(filters).some(Boolean);
+
+  const { data: searchJobs, isLoading: searchLoading } =
+    useSearchResults(filters);
 
   const { data: defaultJobs, isLoading: defaultLoading, isError } = useJobs();
 

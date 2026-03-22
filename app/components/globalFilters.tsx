@@ -1,92 +1,71 @@
 "use client";
-import React, { useState } from "react";
-type FilterKey = "workmode" | "salary" | "education" | "freshness";
-type SelectedFilters = Partial<Record<FilterKey, string>>;
 
-const filterOptions: Record<FilterKey, string[]> = {
-  workmode: ["Remote", "Hybrid", "Onsite"],
-  salary: ["3-5 LPA", "5-10 LPA", "10-20 LPA", "20+ LPA"],
-  education: ["Bachelors", "Masters", "PhD", "Diploma"],
-  freshness: ['Past 24 hours','4 days ago', '1 week ago', '1 month ago'],
-};
+import { useRouter, useSearchParams } from "next/navigation";
+import FilterDropdown from "./common/filterDropdown";
 
-const GlobalFilters: React.FC = () => {
-  const [selectedFilters, setSelectedFilters] = useState<SelectedFilters>({});
+const FiltersBar = () => {
+  const router = useRouter();
+  const searchParams = useSearchParams();
 
-  const handleChange = (filter: FilterKey, value: string) => {
-    if (!value) return;
+  // ✅ read from URL (source of truth)
+  const jobType = searchParams.get("jobType") || "";
+  const salary = searchParams.get("salary") || "";
+  const workMode = searchParams.get("workMode") || "";
 
-    setSelectedFilters((prev) => ({
-      ...prev,
-      [filter]: value,
-    }));
+  const updateParam = (key: string, value: string) => {
+    const params = new URLSearchParams(searchParams.toString());
+
+    if (value) {
+      params.set(key, value);
+    } else {
+      params.delete(key); // clear selection
+    }
+
+    router.push(`?${params.toString()}`);
   };
 
-  const removeFilter = (filter: FilterKey) => {
-    setSelectedFilters((prev) => {
-      const updated = { ...prev };
-      delete updated[filter];
-      return updated;
-    });
-  };
+  const JOB_TYPE_OPTIONS = [
+    { label: "Full Time", value: "fulltime" },
+    { label: "Part Time", value: "parttime" },
+    { label: "Internship", value: "internship" },
+  ];
+
+  const SALARY_OPTIONS = [
+    { label: "0 - 5 LPA", value: "0-5" },
+    { label: "5 - 10 LPA", value: "5-10" },
+    { label: "10+ LPA", value: "10+" },
+  ];
+
+  const REMOTE_OPTIONS = [
+    { label: "Remote", value: "remote" },
+    { label: "On-site", value: "onsite" },
+    { label: "Hybrid", value: "hybrid" },
+  ];
 
   return (
-    <div>
-      {/* Filter Row */}
-      <div className="flex gap-4 py-4 justify-center items-center">
-        {(Object.keys(filterOptions) as FilterKey[]).map((filter) => (
-          <select
-            key={filter}
-            value={selectedFilters[filter] || ""}
-            onChange={(e) => handleChange(filter, e.target.value)}
-            className="border px-2 py-1 rounded-md appearance-none"
-          >
-            <option value="">
-              {filter.charAt(0).toUpperCase() + filter.slice(1)}
-            </option>
+    <div className="flex gap-3 mt-4 justify-center">
+      <FilterDropdown
+        placeholder="Job Type"
+        options={JOB_TYPE_OPTIONS}
+        value={jobType}
+        onChange={(val) => updateParam("jobType", val)}
+      />
 
-            {filterOptions[filter].map((option) => (
-              <option key={option} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-        ))}
-      </div>
+      <FilterDropdown
+        placeholder="Salary"
+        options={SALARY_OPTIONS}
+        value={salary}
+        onChange={(val) => updateParam("salary", val)}
+      />
 
-      {/* Selected Filter Chips */}
-      <div className="w-fit mx-auto flex gap-2">
-        {(Object.entries(selectedFilters) as [FilterKey, string][]).map(
-          ([filter, value]) => (
-            <div
-              key={filter}
-              style={{
-                display: "flex",
-                alignItems: "center",
-                gap: "6px",
-                padding: "6px 10px",
-                border: "1px solid #ccc",
-                borderRadius: "20px",
-                fontSize: "14px",
-                background: "#f5f5f5",
-              }}
-            >
-              {filter}: {value}
-              <span
-                onClick={() => removeFilter(filter)}
-                style={{
-                  cursor: "pointer",
-                  fontWeight: "bold",
-                }}
-              >
-                ×
-              </span>
-            </div>
-          ),
-        )}
-      </div>
+      <FilterDropdown
+        placeholder="Work Mode"
+        options={REMOTE_OPTIONS}
+        value={workMode}
+        onChange={(val) => updateParam("workMode", val)}
+      />
     </div>
   );
 };
 
-export default GlobalFilters;
+export default FiltersBar;

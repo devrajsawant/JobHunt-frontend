@@ -3,7 +3,7 @@ import { getSearchResults, getSuggestions } from "@/api/searchApi";
 
 export const useSearchSuggestions = (
   query: string,
-  type: "job" | "location"
+  type: "job" | "location",
 ) => {
   return useQuery({
     queryKey: ["searchSuggestions", query, type],
@@ -17,14 +17,13 @@ export const useSearchResults = (filters: {
   position?: string;
   location?: string;
   experience?: string;
+  jobType?: string;
+  salary?: string;
+  workMode?: string;
 }) => {
   return useQuery({
     queryKey: ["search-results", filters],
     queryFn: () => getSearchResults(filters),
-    enabled: !!(
-      filters.position ||
-      filters.location ||
-      filters.experience
-    ),
+    enabled: Object.values(filters).some(Boolean),
   });
 };

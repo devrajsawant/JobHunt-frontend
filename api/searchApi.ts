@@ -15,13 +15,26 @@ export const getSearchResults = async ({
   position,
   location,
   experience,
+  jobType,
+  salary,
+  workMode,
 }: {
   position?: string;
   location?: string;
   experience?: string;
+  jobType?: string;
+  salary?: string;
+  workMode?: string;
 }) => {
   const res = await api.get("/search/results", {
-    params: { position, location, experience },
+    params: {
+      position,
+      location,
+      experience,
+      jobType,
+      salary,
+      workMode,
+    },
   });
 
   return res.data;

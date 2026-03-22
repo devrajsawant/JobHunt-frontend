@@ -5,11 +5,37 @@ import { MoveUpRight } from "lucide-react";
 import Image from "next/image";
 import { useSearchParams } from "next/navigation";
 import selectJobFeed from "../../../public/vectorIllustrations/select-job-feed.svg";
+import { useApplyToJob, useMyApplications } from "@/hooks/useApplication";
+import toast from "react-hot-toast";
 const FeedJobDetails = () => {
   const searchParams = useSearchParams();
   const jobId = searchParams.get("jobId");
 
   const { data: job, isLoading, isError } = useJobById(jobId);
+  const { data: applications, isLoading: isAppLoading } = useMyApplications();
+  const { mutate: applyJob, isPending } = useApplyToJob();
+
+  const alreadyApplied = applications?.some((app) => app.jobId._id === jobId);
+
+  const handleApply = () => {
+    if (!jobId) return;
+
+    applyJob(
+      {
+        jobId,
+        resume: "https://your-resume-link.pdf", // replace later with user.resume
+        coverLetter: "I am interested in this role",
+      },
+      {
+        onSuccess: () => {
+          toast.success("Applied successfully!");
+        },
+        onError: (err: any) => {
+          toast.error(err?.response?.data?.message || "Failed to apply");
+        },
+      },
+    );
+  };
 
   if (isLoading) return <div>Loading job details...</div>;
   if (isError) return <div>Failed to load job.</div>;
@@ -71,9 +97,27 @@ const FeedJobDetails = () => {
       <p className="text-md text-gray-700 leading-relaxed">{job.description}</p>
 
       <div>
-        <button className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer ">
-          Apply <MoveUpRight size={15} />
-        </button>
+        {isAppLoading ? (
+          <button
+            disabled
+            className="w-full py-2 bg-gray-400 text-white rounded-md my-3"
+          >
+            Checking...
+          </button>
+        ) : alreadyApplied ? (
+          <div className="w-full text-center py-2 bg-green-100 text-green-700 rounded-md my-3 font-semibold">
+            Applied
+          </div>
+        ) : (
+          <button
+            onClick={handleApply}
+            disabled={isPending}
+            className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer disabled:opacity-50"
+          >
+            {isPending ? "Applying..." : "Apply"}
+            <MoveUpRight size={15} />
+          </button>
+        )}
       </div>
     </div>
   );

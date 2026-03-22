@@ -11,6 +11,7 @@ const Navbar = () => {
   const [loginModalOpen, setLoginModalOpen] = useState(false);
   const [employeeDropdownOpen, setEmployeeDropdownOpen] = useState(false);
   const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const user = useSelector((state: RootState) => state.auth.user);
   const company = useSelector((state: RootState) => state.auth.company);
   const handleEmployerClick = () => {
     if (!isLoggedIn) {
@@ -50,22 +51,28 @@ const Navbar = () => {
             {/* Avatar */}
             <button
               onClick={() => setOpen(!open)}
-              className="w-10 h-10 rounded-full bg-zinc-700 text-white flex items-center justify-center"
+              className="bg-zinc-800 px-3 rounded-sm text-white flex items-center justify-center"
             >
-              U
+              {user.name}
             </button>
 
             {/* Dropdown */}
             {open && (
-              <div className="absolute right-0 mt-2 w-40 bg-white border rounded shadow-md">
+              <div className="absolute right-0 mt-2 w-45 bg-white border rounded-lg shadow-md">
                 <Link
                   href="/profile"
-                  className="block px-4 py-2 hover:bg-gray-100"
+                  className="block px-4 py-2 hover:bg-gray-100 rounded-lg"
                 >
                   Profile
                 </Link>
+                <Link
+                  href="/profile/applications"
+                  className="block px-4 py-2 hover:bg-gray-100 rounded-lg"
+                >
+                  My Applications
+                </Link>
 
-                <button className="w-full text-left px-4 py-2 hover:bg-gray-100">
+                <button className="w-full text-left px-4 py-2 hover:bg-gray-100 rounded-lg">
                   <Link href="/logout">Logout</Link>
                 </button>
               </div>
