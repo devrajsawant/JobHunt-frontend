@@ -5,7 +5,7 @@ type JobProps = {
   job: {
     _id: string
     title: string;
-    company: string;
+    company?: string;
     location: string;
     experience: string;
     salary: string;

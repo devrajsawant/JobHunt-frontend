@@ -4,6 +4,7 @@ import { useSearchParams } from "next/navigation";
 import { useSearchResults } from "@/hooks/useSearch";
 import { useJobs } from "@/hooks/useJobs";
 import JobCard from "../common/jobCard";
+import { Job } from "@/types/job";
 
 const FeedJobsList = () => {
   const searchParams = useSearchParams();
@@ -33,7 +34,7 @@ const FeedJobsList = () => {
   return (
     <div className="p-4 space-y-3">
       {jobs && jobs.length > 0 ? (
-        jobs.map((job) => <JobCard key={job._id} job={job} />)
+        jobs.map((job: Job) => <JobCard key={job._id} job={job} />)
       ) : (
         <div>No jobs found</div>
       )}
