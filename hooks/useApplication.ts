@@ -3,6 +3,7 @@ import {
   applyToJob,
   ApplyJobPayload,
   getMyApplications,
+  getApplicationsByJob,
 } from "@/api/applicationApi";
 import { Application } from "@/types/application";
 
@@ -23,5 +24,14 @@ export const useMyApplications = () => {
     queryKey: ["myApplications"],
     queryFn: getMyApplications,
     staleTime: 1000 * 60, // 1 min
+  });
+};
+
+export const useJobApplications = (jobId: string) => {
+  return useQuery<Application[]>({
+    queryKey: ["jobApplications", jobId],
+    queryFn: () => getApplicationsByJob(jobId),
+    enabled: !!jobId, // important
+    staleTime: 1000 * 60,
   });
 };

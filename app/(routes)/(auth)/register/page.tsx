@@ -26,6 +26,7 @@ const Page = () => {
   const password = watch("password");
 
   const onSubmit = (data: RegisterForm) => {
+    console.log(data)
     mutate(
       {
         firstname: data.firstname,

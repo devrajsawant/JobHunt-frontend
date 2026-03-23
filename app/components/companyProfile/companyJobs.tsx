@@ -18,7 +18,9 @@ const CompanyJobs = () => {
   return (
     <div className="grid grid-cols-2 gap-4">
       {jobs && jobs.length > 0 ? (
-        jobs.map((job: Job) => <JobCard key={job._id} job={job} />)
+        jobs.map((job: Job) => (
+          <JobCard key={job._id} job={job} isCompanyPage />
+        ))
       ) : (
         <div>No jobs found</div>
       )}
