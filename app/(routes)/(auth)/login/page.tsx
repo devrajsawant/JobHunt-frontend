@@ -19,11 +19,13 @@ const Page = () => {
     reset,
     formState: { errors },
   } = useForm<LoginForm>();
+
   const [showPassword, setShowPassword] = useState(false);
 
   const { mutate, isPending } = useLogin();
   const router = useRouter();
   const dispatch = useDispatch();
+
   const onSubmit = (data: LoginForm) => {
     mutate(data, {
       onSuccess: (res) => {
@@ -36,62 +38,86 @@ const Page = () => {
   };
 
   return (
-    <div>
-      <h1 className="text-6xl font-serif text-center">Login</h1>
-      <h1 className="text-2xl mt-4 mb-8 text-center font-mono">Welcome Back</h1>
-
-      <form onSubmit={handleSubmit(onSubmit)}>
-        {/* Email */}
-        <div className="my-3">
-          <p className="text-xl font-mono">Email</p>
-          <input
-            type="email"
-            {...register("email", loginValidation.email)}
-            className="w-md h-8 border rounded-sm outline-none px-2 py-1"
-          />
-          {errors.email && (
-            <p className="text-red-500 text-sm">{errors.email.message}</p>
-          )}
-        </div>
-
-        {/* Password */}
-        <div className="my-3 relative">
-          <p className="text-xl font-mono">Password</p>
-          <input
-            type={showPassword ? "text" : "password"}
-            {...register("password", loginValidation.password)}
-            className="w-md h-8 border rounded-sm outline-none px-2 py-1"
-          />
-          <span
-            className="absolute right-3 top-9 cursor-pointer"
-            onClick={() => setShowPassword(!showPassword)}
-          >
-            {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
-          </span>
-          {errors.password && (
-            <p className="text-red-500 text-sm">{errors.password.message}</p>
-          )}
-        </div>
-
-        <p className="text-amber-700 my-2 text-end">
-          <Link href="/forgetPassword">Forget Password ?</Link>
+    <div className="min-h-screen flex items-center justify-center px-4">
+      <div className="w-full max-w-md">
+        {/* Heading */}
+        <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-center">
+          Login
+        </h1>
+        <p className="text-lg sm:text-xl mt-2 mb-6 text-center font-mono text-gray-600">
+          Welcome Back
         </p>
 
-        <button
-          type="submit"
-          disabled={isPending}
-          className="w-full bg-zinc-700 text-white py-2 rounded-sm text-xl font-serif"
-        >
-          {isPending ? "Logging in..." : "Login"}
-        </button>
-      </form>
+        {/* Form */}
+        <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
+          {/* Email */}
+          <div>
+            <label className="text-sm sm:text-base font-mono">Email</label>
+            <input
+              type="email"
+              {...register("email", loginValidation.email)}
+              className="w-full h-10 border rounded-md outline-none px-3 mt-1"
+            />
+            {errors.email && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.email.message}
+              </p>
+            )}
+          </div>
 
-      <p className="mt-3">
-        Don&apos;t have an account yet?{" "}
-        <Link href="/register" className="text-amber-700">
-          Register Here
-        </Link>
-      </p>
+          {/* Password */}
+          <div className="relative">
+            <label className="text-sm sm:text-base font-mono">Password</label>
+
+            <input
+              type={showPassword ? "text" : "password"}
+              {...register("password", loginValidation.password)}
+              className="w-full h-10 border rounded-md outline-none px-3 pr-10 mt-1"
+            />
+
+            {/* Eye Icon */}
+            <span
+              className="absolute right-3 top-[38px] cursor-pointer text-gray-600"
+              onClick={() => setShowPassword(!showPassword)}
+            >
+              {showPassword ? <EyeOff size={18} /> : <Eye size={18} />}
+            </span>
+
+            {errors.password && (
+              <p className="text-red-500 text-sm mt-1">
+                {errors.password.message}
+              </p>
+            )}
+          </div>
+
+          {/* Forgot Password */}
+          <div className="text-right">
+            <Link
+              href="/forgetPassword"
+              className="text-sm text-amber-700 hover:underline"
+            >
+              Forget Password?
+            </Link>
+          </div>
+
+          {/* Submit */}
+          <button
+            type="submit"
+            disabled={isPending}
+            className="w-full bg-zinc-700 text-white py-2.5 rounded-md text-base sm:text-lg font-serif hover:bg-zinc-800 transition"
+          >
+            {isPending ? "Logging in..." : "Login"}
+          </button>
+        </form>
+
+        {/* Footer */}
+        <p className="mt-4 text-sm sm:text-base text-center">
+          Don&apos;t have an account?{" "}
+          <Link href="/register" className="text-amber-700 hover:underline">
+            Register Here
+          </Link>
+        </p>
+      </div>
     </div>
   );
 };

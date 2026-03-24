@@ -6,9 +6,9 @@ type AuthLayoutProps = {
 
 const AuthLayout = ({ children }: AuthLayoutProps) => {
   return (
-    <div className="grid grid-cols-2 h-screen w-full">
+    <div className="flex h-screen w-full">
       <AuthLayoutLeftSection />
-      <div className="flex justify-center items-center">{children}</div>
+      <div className="flex justify-center items-center mx-auto">{children}</div>
     </div>
   );
 };

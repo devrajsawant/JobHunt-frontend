@@ -18,18 +18,18 @@ const FilterDropdown = ({ placeholder, options, value, onChange }: Props) => {
   const [open, setOpen] = useState(false);
 
   return (
-    <div className="relative w-40">
+    <div className="relative sm:w-40">
       {/* Trigger */}
       <div
         onClick={() => setOpen((prev) => !prev)}
-        className="px-4 py-2 border rounded-md bg-white cursor-pointer"
+        className="px-4 py-2 border rounded-md bg-white cursor-pointer truncate"
       >
         {value ? options.find((o) => o.value === value)?.label : placeholder}
       </div>
 
       {/* Dropdown */}
       {open && (
-        <div className="absolute w-full bg-white border mt-1 rounded-md shadow z-10">
+        <div className="absolute w-28 bg-white border mt-1 rounded-md shadow z-10">
           {options.map((item, i) => (
             <div
               key={i}

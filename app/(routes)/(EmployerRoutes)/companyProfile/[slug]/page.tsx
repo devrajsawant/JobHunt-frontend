@@ -18,6 +18,7 @@ const Page = () => {
   const params = useParams();
   const slug = params.slug as string;
   const { data: company, isLoading } = useCompany(slug);
+
   if (isLoading) return <p>Loading...</p>;
 
   const tabs = [
@@ -27,69 +28,77 @@ const Page = () => {
   ];
 
   return (
-    <div className="max-w-5xl mx-auto p-6">
+    <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
       {/* Company Banner */}
-      <div className="flex justify-between">
-        <div className="rounded-xl p-6 flex items-center gap-6">
-          {/* <Image
-            src={company.logo}
-            className="w-20 h-20 rounded-lg"
+      <div className="flex flex-col lg:flex-row justify-between gap-6">
+        {/* Left Section */}
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+          {/* Logo */}
+          <Image
+            src={company.logo || userFallback}
+            className="w-16 h-16 sm:w-20 sm:h-20 rounded-lg object-cover"
             height={200}
             width={200}
             alt="company pfp"
-          /> */}
+          />
 
-          <div className="flex flex-col">
-            <h1 className="text-4xl font-bold text-gray-800">{company.name}</h1>
-            <p className="text-gray-500 text-xl font-semibold">
+          {/* Info */}
+          <div>
+            <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
+              {company.name}
+            </h1>
+
+            <p className="text-gray-500 text-sm sm:text-base font-semibold">
               {company.location}
             </p>
 
             {/* Rating */}
-            <div className="flex items-center gap-1 text-yellow-500 mt-1">
+            <div className="flex items-center gap-1 mt-1">
               {[...Array(5)].map((_, i) => (
                 <Star
                   key={i}
-                  size={20}
+                  size={18}
                   className={`${
                     i < company.rating ? "text-yellow-500" : "text-gray-400"
                   }`}
                 />
               ))}
 
-              <span className="text-gray-600 text-md ml-2">
+              <span className="text-gray-600 text-sm ml-2">
                 {company.ratingValue} Rating
               </span>
             </div>
           </div>
         </div>
-        <div className="p-6 flex gap-4">
+
+        {/* Right Buttons */}
+        <div className="flex flex-wrap gap-3">
           <Link
             href={`/companyProfile/${slug}/edit`}
-            className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
+            className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
           >
-            {" "}
             Edit Details
           </Link>
 
           <Link
             href={`/companyProfile/${slug}/jobPosting`}
-            className="bg-zinc-700 text-white px-3 py-1 h-fit rounded-sm"
+            className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
           >
-            Create new job
+            Create Job
           </Link>
         </div>
       </div>
+
       {/* Tabs */}
-      <div className="flex gap-8 border-b mt-8">
+      <div className="flex gap-6 sm:gap-8 border-b mt-8 overflow-x-auto">
         {tabs.map((tab) => (
           <button
             key={tab.id}
             onClick={() => setActiveTab(tab.id)}
-            className={`pb-3 cursor-pointer  text-lg ${
+            className={`pb-3 whitespace-nowrap text-sm sm:text-base ${
               activeTab === tab.id
                 ? "border-b-2 border-gray-600 text-gray-700 font-semibold"
-                : "text-gray-500 font-normal"
+                : "text-gray-500"
             }`}
           >
             {tab.label}

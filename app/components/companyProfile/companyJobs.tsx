@@ -16,7 +16,7 @@ const CompanyJobs = () => {
   if (isError) return <div>Failed to load jobs.</div>;
 
   return (
-    <div className="grid grid-cols-2 gap-4">
+    <div className="grid sm:grid-cols-2 gap-4">
       {jobs && jobs.length > 0 ? (
         jobs.map((job: Job) => (
           <JobCard key={job._id} job={job} isCompanyPage />

@@ -43,7 +43,7 @@ const FiltersBar = () => {
   ];
 
   return (
-    <div className="flex gap-3 mt-4 justify-center">
+    <div className="flex gap-1 sm:gap-4 mt-4 justify-center ">
       <FilterDropdown
         placeholder="Job Type"
         options={JOB_TYPE_OPTIONS}
