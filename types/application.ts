@@ -2,7 +2,11 @@ export type Application = {
   _id: string;
   status: "pending" | "reviewed" | "shortlisted" | "rejected" | "accepted";
   createdAt: string;
-
+  userId: {
+    name: string;
+    email: string;
+  };
+  resume: string;
   jobId: {
     _id: string;
     title: string;
@@ -16,4 +20,4 @@ export type Application = {
       logo?: string;
     };
   };
-}
+};
