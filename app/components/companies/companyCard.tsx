@@ -5,8 +5,8 @@ import { StarIcon } from "lucide-react";
 import Link from "next/link";
 type Company = {
   name: string;
-  logo: string;
-  employees: number;
+  logo?: string;
+  employees?: number;
   jobs: number;
   reviews: number;
   rating: number;

@@ -1,52 +1,14 @@
+"use client";
+
 import CompaniesSearchBar from "@/app/components/companies/companiesSearchBar";
 import CompanyCard from "@/app/components/companies/companyCard";
 import Navbar from "@/app/components/navbar";
 import React from "react";
-
-const companies = [
-  {
-    name: "Google",
-    logo: "https://logo.clearbit.com/google.com",
-    employees: 150000,
-    jobs: 124,
-    reviews: 4300,
-    rating: 4.5,
-  },
-  {
-    name: "Microsoft",
-    logo: "https://logo.clearbit.com/microsoft.com",
-    employees: 181000,
-    jobs: 98,
-    reviews: 3900,
-    rating: 4.4,
-  },
-  {
-    name: "Amazon",
-    logo: "https://logo.clearbit.com/amazon.com",
-    employees: 1600000,
-    jobs: 230,
-    reviews: 5200,
-    rating: 4.1,
-  },
-  {
-    name: "Meta",
-    logo: "https://logo.clearbit.com/meta.com",
-    employees: 86000,
-    jobs: 65,
-    reviews: 2100,
-    rating: 4.3,
-  },
-  {
-    name: "Netflix",
-    logo: "https://logo.clearbit.com/netflix.com",
-    employees: 13000,
-    jobs: 21,
-    reviews: 1200,
-    rating: 4.6,
-  },
-];
+import { useCompanies } from "@/hooks/useCompany";
 
 const Page = () => {
+  const { data: companies, isLoading, isError } = useCompanies();
+
   return (
     <div>
       <Navbar />
@@ -56,12 +18,34 @@ const Page = () => {
         <CompaniesSearchBar />
       </div>
 
+      {/* States */}
+      {isLoading && <p className="text-center mt-10">Loading companies...</p>}
+
+      {isError && (
+        <p className="text-center mt-10 text-red-500">
+          Failed to load companies
+        </p>
+      )}
+
       {/* Companies Grid */}
       <div className="max-w-6xl mx-auto mt-10 grid grid-cols-1 sm:grid-cols-2 gap-6 px-6">
-        {companies.map((company, index) => (
-          <CompanyCard key={index} {...company} />
+        {companies?.map((company) => (
+          <CompanyCard
+            key={company._id}
+            name={company.name}
+            logo={company.logo}
+            employees={company.size} // adjust if needed
+            jobs={0} // you can update later from jobs API
+            reviews={0} // placeholder
+            rating={0} // placeholder
+          />
         ))}
       </div>
+
+      {/* Empty State */}
+      {companies?.length === 0 && !isLoading && (
+        <p className="text-center mt-10">No companies found</p>
+      )}
     </div>
   );
 };

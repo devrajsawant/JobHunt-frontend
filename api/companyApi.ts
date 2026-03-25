@@ -26,3 +26,8 @@ export const getCompanyJobs = async (slug: string): Promise<Job[]> => {
   const res = await api.get(`/jobs/company/${slug}`);
   return res.data.jobs; // matches the backend response
 };
+
+export const getAllCompanies = async () => {
+  const res = await api.get("/companies");
+  return res.data.companies; // matches backend response
+};
