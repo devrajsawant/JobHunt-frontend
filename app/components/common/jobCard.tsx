@@ -20,7 +20,7 @@ const JobCard = ({ job, isCompanyPage }: JobProps) => {
   const slug = params.slug as string;
   const handleClick = () => {
     if (isCompanyPage) {
-      router.push(`/companyProfile/${slug}/${job._id}`);
+      router.push(`/companyProfile/${slug || job.companyId}/${job._id}`);
     } else {
       router.push(`?jobId=${job._id}&companyId=${job.companyId}`);
     }

@@ -5,10 +5,11 @@ import { useSearchResults } from "@/hooks/useSearch";
 import { useJobs } from "@/hooks/useJobs";
 import JobCard from "../common/jobCard";
 import { Job } from "@/types/job";
+import { useIsMobile } from "@/hooks/useIsMobile";
 
 const FeedJobsList = () => {
   const searchParams = useSearchParams();
-
+  const isMobile = useIsMobile(); 
   const filters = {
     position: searchParams.get("position") || "",
     location: searchParams.get("location") || "",
@@ -34,7 +35,7 @@ const FeedJobsList = () => {
   return (
     <div className="p-4 space-y-3">
       {jobs && jobs.length > 0 ? (
-        jobs.map((job: Job) => <JobCard key={job._id} job={job} />)
+        jobs.map((job: Job) => <JobCard key={job._id} job={job} isCompanyPage={isMobile} />)
       ) : (
         <div>No jobs found</div>
       )}

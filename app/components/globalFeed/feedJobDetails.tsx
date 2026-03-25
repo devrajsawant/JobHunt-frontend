@@ -63,21 +63,12 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
 
   return (
     <div className="p-6">
-      <div className="flex justify-between">
-        <div>
-          <h2 className="text-2xl font-bold">{job.title}</h2>
-          <p className="text-gray-700 font-semibold mt-1 text-xl">
-            {/* @ts-expect-error: name field is populated from backend to show the name but on FE we kept companyId as string for simplification */}
-            {job.companyId?.name || "Company"}
-          </p>
-        </div>
-        {isSingleJobPage && (
-          <button className="bg-zinc-800 px-3 py-1 h-fit rounded-sm text-white flex items-center justify-center">
-            <Link href={`/companyProfile/${slug}/${jobId}/applications`}>
-              Track Applications
-            </Link>
-          </button>
-        )}
+      <div>
+        <h2 className="text-2xl font-bold">{job.title}</h2>
+        <p className="text-gray-700 font-semibold mt-1 text-xl">
+          {/* @ts-expect-error: name field is populated from backend to show the name but on FE we kept companyId as string for simplification */}
+          {job.companyId?.name || "Company"}
+        </p>
       </div>
 
       <p className="text-gray-600 my-2 text-lg">
@@ -131,6 +122,13 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
           >
             {isPending ? "Applying..." : "Apply"}
             <MoveUpRight size={15} />
+          </button>
+        )}
+        {isSingleJobPage && (
+          <button className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer disabled:opacity-50">
+            <Link href={`/companyProfile/${slug}/${jobId}/applications`}>
+              Track Applications
+            </Link>
           </button>
         )}
       </div>

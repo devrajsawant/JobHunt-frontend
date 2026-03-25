@@ -29,6 +29,7 @@ export default function RootLayout({
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-gray-100`}
       >
+        <div className="bg-red-400 text-center font-thin text-xs sm:text-lg">This is ongoing project | Status - 60% completed</div>
         <Providers>{children}</Providers>
         <Toaster position="top-center" reverseOrder={false} />
       </body>
