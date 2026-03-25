@@ -5,6 +5,7 @@ import JobCard from "../common/jobCard";
 import { useParams } from "next/navigation";
 import { useCompanyJobs } from "@/hooks/useCompany";
 import { Job } from "@/types/job";
+import NoResultsFound from "../common/NoResultsFound";
 
 const CompanyJobs = () => {
   const params = useParams();
@@ -12,8 +13,8 @@ const CompanyJobs = () => {
 
   const { data: jobs, isLoading, isError } = useCompanyJobs(slug);
 
-  if (isLoading) return <div>Loading jobs...</div>;
-  if (isError) return <div>Failed to load jobs.</div>;
+  if (isLoading) return <div className="text-center">Loading jobs...</div>;
+  if (isError) return <div className="text-center">Failed to load jobs.</div>;
 
   return (
     <div className="grid sm:grid-cols-2 gap-4">
@@ -21,9 +22,7 @@ const CompanyJobs = () => {
         jobs.map((job: Job) => (
           <JobCard key={job._id} job={job} isCompanyPage />
         ))
-      ) : (
-        <div>No jobs found</div>
-      )}
+      ) : <NoResultsFound />}
     </div>
   );
 };

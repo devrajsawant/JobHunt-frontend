@@ -8,10 +8,17 @@ import selectJobFeed from "../../../public/vectorIllustrations/select-job-feed.s
 import { useApplyToJob, useMyApplications } from "@/hooks/useApplication";
 import toast from "react-hot-toast";
 import Link from "next/link";
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
+import LoginRequiredModal from "../model/loginRequiredModel";
+import { useState } from "react";
 type props = {
   isSingleJobPage?: boolean;
 };
 const FeedJobDetails = ({ isSingleJobPage }: props) => {
+  const isLoggedIn = useSelector((state: RootState) => state.auth.isLoggedIn);
+  const [loginModalOpen, setLoginModalOpen] = useState(false);
+
   const searchParams = useSearchParams();
   const params = useParams();
   const slug = params.slug as string;
@@ -21,11 +28,16 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
   const { data: applications, isLoading: isAppLoading } = useMyApplications();
   const { mutate: applyJob, isPending } = useApplyToJob();
 
-  const alreadyApplied = applications?.some((app) => app.jobId._id === jobId);
+  const alreadyApplied = isLoggedIn
+    ? applications?.some((app) => app.jobId._id === jobId)
+    : false;
 
   const handleApply = () => {
     if (!jobId) return;
-
+    if (!isLoggedIn) {
+      setLoginModalOpen(true);
+      return;
+    }
     applyJob(
       {
         jobId,
@@ -132,6 +144,11 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
           </button>
         )}
       </div>
+
+      <LoginRequiredModal
+        isOpen={loginModalOpen}
+        onClose={() => setLoginModalOpen(false)}
+      />
     </div>
   );
 };
