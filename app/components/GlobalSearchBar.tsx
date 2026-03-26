@@ -124,7 +124,7 @@ const GlobalSearchBar = () => {
                     );
                     setShowExpDropdown(false);
                   }}
-                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                  className="px-4 py-2 hover:bg-gray-100 cursor-pointer rounded-md"
                 >
                   {item.label}
                 </div>

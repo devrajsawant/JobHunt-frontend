@@ -2,12 +2,18 @@
 
 import React from "react";
 import { useParams } from "next/navigation";
-import { useJobApplications } from "@/hooks/useApplication";
+import {
+  useJobApplications,
+  useUpdateApplicationStatus,
+} from "@/hooks/useApplication";
+import { ApplicationStatus } from "@/types/application";
 
 const statusStyles: Record<string, string> = {
   pending: "bg-yellow-100 text-yellow-700",
+  reviewed: "bg-blue-100 text-blue-700",
   shortlisted: "bg-green-100 text-green-700",
   rejected: "bg-red-100 text-red-700",
+  accepted: "bg-purple-100 text-purple-700",
 };
 
 const Page = () => {
@@ -15,6 +21,7 @@ const Page = () => {
   const jobId = params?.["job-id"] as string;
 
   const { data, isLoading, isError } = useJobApplications(jobId);
+  const { mutate: updateStatus, isPending } = useUpdateApplicationStatus();
 
   if (isLoading) {
     return <div className="p-6">Loading applications...</div>;
@@ -27,6 +34,13 @@ const Page = () => {
   if (!data || data.length === 0) {
     return <div className="p-6">No applications for this job</div>;
   }
+
+  const handleStatusChange = (applicationId: string, newStatus: ApplicationStatus) => {
+    updateStatus({
+      applicationId,
+      status: newStatus,
+    });
+  };
 
   return (
     <div className="p-6">
@@ -47,7 +61,6 @@ const Page = () => {
           <tbody>
             {data.map((app) => (
               <tr key={app._id} className="hover:bg-gray-50">
-                {/* Date FIRST */}
                 <td className="p-3 border-b">
                   {new Date(app.createdAt).toLocaleDateString()}
                 </td>
@@ -66,17 +79,23 @@ const Page = () => {
                   </a>
                 </td>
 
-                {/* STATUS CHIP DROPDOWN */}
+                {/* STATUS DROPDOWN */}
                 <td className="p-3 border-b text-center">
                   <select
-                    defaultValue={app.status || "pending"}
+                    value={app.status || "pending"}
+                    disabled={isPending}
+                    onChange={(e) =>
+                      handleStatusChange(app._id, e.target.value as ApplicationStatus)
+                    }
                     className={`px-3 py-1 rounded-full text-sm font-medium outline-none cursor-pointer ${
                       statusStyles[app.status || "pending"]
                     }`}
                   >
                     <option value="pending">Pending</option>
+                    <option value="reviewed">Reviewed</option>
                     <option value="shortlisted">Shortlisted</option>
                     <option value="rejected">Rejected</option>
+                    <option value="accepted">Accepted</option>
                   </select>
                 </td>
               </tr>

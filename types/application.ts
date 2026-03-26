@@ -21,3 +21,11 @@ export type Application = {
     };
   };
 };
+
+// types/application.ts
+export type ApplicationStatus =
+  | "pending"
+  | "reviewed"
+  | "shortlisted"
+  | "rejected"
+  | "accepted";

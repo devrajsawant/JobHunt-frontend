@@ -62,22 +62,22 @@ const Navbar = () => {
               </button>
 
               {open && (
-                <div className="absolute right-0 mt-2 w-45 bg-white border rounded-lg shadow-md">
+                <div className="absolute right-0 mt-2 w-45 bg-white border rounded-lg shadow-md z-10">
                   <Link
                     href="/profile"
-                    className="block px-4 py-2 hover:bg-gray-100"
+                    className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                   >
                     Profile
                   </Link>
                   <Link
                     href="/profile/applications"
-                    className="block px-4 py-2 hover:bg-gray-100"
+                    className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                   >
                     My Applications
                   </Link>
                   <Link
                     href="/logout"
-                    className="block px-4 py-2 hover:bg-gray-100"
+                    className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                   >
                     Logout
                   </Link>
@@ -98,18 +98,18 @@ const Navbar = () => {
             </button>
 
             {employeeDropdownOpen && (
-              <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md">
+              <div className="absolute right-0 mt-2 w-60 bg-white border rounded shadow-md z-10">
                 {company ? (
                   <>
                     <Link
                       href={`/companyProfile/${company.slug}/jobPosting`}
-                      className="block px-4 py-2 hover:bg-gray-100"
+                      className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                     >
                       Post Job
                     </Link>
                     <Link
                       href={`/companyProfile/${company.slug}`}
-                      className="block px-4 py-2 hover:bg-gray-100"
+                      className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                     >
                       Company Profile
                     </Link>
@@ -117,7 +117,7 @@ const Navbar = () => {
                 ) : (
                   <Link
                     href="/registerCompany"
-                    className="block px-4 py-2 hover:bg-gray-100"
+                    className="block px-4 py-2 hover:bg-gray-100 rounded-md"
                   >
                     Register Company
                   </Link>

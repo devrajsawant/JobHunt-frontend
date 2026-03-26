@@ -4,6 +4,7 @@ import {
   ApplyJobPayload,
   getMyApplications,
   getApplicationsByJob,
+  updateApplicationStatus,
 } from "@/api/applicationApi";
 import { Application } from "@/types/application";
 
@@ -33,5 +34,25 @@ export const useJobApplications = (jobId: string) => {
     queryFn: () => getApplicationsByJob(jobId),
     enabled: !!jobId, // important
     staleTime: 1000 * 60,
+  });
+};
+
+export const useUpdateApplicationStatus = () => {
+  const queryClient = useQueryClient();
+
+  return useMutation({
+    mutationFn: updateApplicationStatus,
+
+    onSuccess: (_, variables) => {
+      // Refresh job applications list
+      queryClient.invalidateQueries({
+        queryKey: ["jobApplications"],
+      });
+
+      // Optional: also refresh my applications
+      queryClient.invalidateQueries({
+        queryKey: ["myApplications"],
+      });
+    },
   });
 };
