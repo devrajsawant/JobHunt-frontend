@@ -6,7 +6,7 @@ export const registerValidation: Record<
   keyof RegisterForm,
   RegisterOptions<RegisterForm>
 > = {
-  firstname: {
+  firstName: {
     required: "First name is required",
     minLength: {
       value: 2,
@@ -14,7 +14,7 @@ export const registerValidation: Record<
     },
   },
 
-  lastname: {
+  lastName: {
     required: "Last name is required",
   },
 

@@ -6,6 +6,9 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { useCreateCompany } from "@/hooks/useCompany";
 import toast from "react-hot-toast";
+import { useDispatch, useSelector } from "react-redux";
+import { login } from "@/store/authSlice";
+import { RootState } from "@/store/store";
 
 type CompanyForm = {
   name: string;
@@ -24,6 +27,7 @@ type CompanyForm = {
 const Page = () => {
   const router = useRouter();
   const [preview, setPreview] = useState<string | null>(null);
+  const currentUser = useSelector((state: RootState) => state.auth.user);
 
   const { register, handleSubmit, setValue } = useForm<CompanyForm>();
 
@@ -39,10 +43,19 @@ const Page = () => {
 
   const { mutate, isPending } = useCreateCompany();
 
+  const dispatch = useDispatch();
+
   const onSubmit = (data: CompanyForm) => {
     mutate(data, {
       onSuccess: (res) => {
-        router.push(`/company/${res.company.slug}`);
+        dispatch(
+          login({
+            user: currentUser,
+            company: res.company,
+          }),
+        );
+
+        router.push(`/companyProfile/${res.company.slug}`);
       },
       onError: (err: any) => {
         toast.error(err.response?.data?.message || "Failed to create company");

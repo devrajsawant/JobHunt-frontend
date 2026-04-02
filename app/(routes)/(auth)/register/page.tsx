@@ -30,8 +30,8 @@ const Page = () => {
   const onSubmit = (data: RegisterForm) => {
     mutate(
       {
-        firstname: data.firstname,
-        lastname: data.lastname,
+        firstName: data.firstName,
+        lastName: data.lastName,
         email: data.email,
         password: data.password,
       },
@@ -66,12 +66,12 @@ const Page = () => {
               </label>
               <input
                 type="text"
-                {...register("firstname", registerValidation.firstname)}
+                {...register("firstName", registerValidation.firstName)}
                 className="w-full h-10 border rounded-md px-3 mt-1"
               />
-              {errors.firstname && (
+              {errors.firstName && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.firstname.message}
+                  {errors.firstName.message}
                 </p>
               )}
             </div>
@@ -82,12 +82,12 @@ const Page = () => {
               </label>
               <input
                 type="text"
-                {...register("lastname", registerValidation.lastname)}
+                {...register("lastName", registerValidation.lastName)}
                 className="w-full h-10 border rounded-md px-3 mt-1"
               />
-              {errors.lastname && (
+              {errors.lastName && (
                 <p className="text-red-500 text-sm mt-1">
-                  {errors.lastname.message}
+                  {errors.lastName.message}
                 </p>
               )}
             </div>

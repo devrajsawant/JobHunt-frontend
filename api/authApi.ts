@@ -2,8 +2,8 @@ import { LoginForm } from "@/types/auth";
 import api from "./apiHelper";
 
 export type RegisterPayload = {
-  firstname: string;
-  lastname: string;
+  firstName: string;
+  lastName: string;
   email: string;
   password: string;
 };
