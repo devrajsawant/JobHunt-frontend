@@ -6,7 +6,7 @@ import Link from "next/link";
 type Company = {
   name: string;
   logo?: string;
-  employees?: number;
+  employees?: number | string;
   jobs: number;
   reviews: number;
   rating: number;
@@ -61,7 +61,7 @@ const CompanyCard: React.FC<Company> = ({
               {" "}
               Employees:{" "}
               <span className="font-semibold text-gray-700">
-                {employees.toLocaleString()}
+                {employees?.toLocaleString()}
               </span>{" "}
             </p>{" "}
             |

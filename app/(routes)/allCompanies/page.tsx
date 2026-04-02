@@ -34,8 +34,8 @@ const Page = () => {
             key={company._id}
             name={company.name}
             logo={company.logo}
-            employees={company.size} // adjust if needed
-            jobs={0} // you can update later from jobs API
+            employees={company.size} 
+            jobs={0}
             reviews={0} // placeholder
             rating={0} // placeholder
           />
