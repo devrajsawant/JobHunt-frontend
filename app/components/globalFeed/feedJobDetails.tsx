@@ -29,6 +29,7 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
   const { mutate: applyJob, isPending } = useApplyToJob();
   const currentUser = useSelector((state: RootState) => state.auth.user);
   const isOwner =
+  //@ts-expect-error: ownerid not present
     currentUser?._id?.toString() === job?.companyId?.ownerId?.toString();
   const alreadyApplied = isLoggedIn
     ? applications?.some((app) => app.jobId._id === jobId)
