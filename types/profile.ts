@@ -27,4 +27,5 @@ export type Profile = {
   education: Education[];
   experience: Experience[];
   projects: Project[];
+  avatar: string;
 };

@@ -38,7 +38,7 @@ const CompanyCard: React.FC<Company> = ({
   };
 
   return (
-    <Link className="border rounded-xl p-5 shadow-sm hover:shadow-md transition" href={`/allCompanies/${name}`}>
+    <Link className="border rounded-xl p-5 shadow-sm hover:shadow-md transition" href={`/companyProfile/${name}`}>
       <div className="flex items-center gap-3">
         <Image
           src={userFallback}

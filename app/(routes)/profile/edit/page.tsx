@@ -5,15 +5,17 @@ import { useForm, useFieldArray } from "react-hook-form";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
 import Navbar from "@/app/components/navbar";
-
+import { uploadImage } from "@/utils/imageUpload";
 import { Profile } from "@/types/profile";
 import { useProfile, useUpdateProfile } from "@/hooks/useProfile";
+import userFallback from "../../../../public/userFallback.png";
 
 const Page = () => {
   const router = useRouter();
 
   const [skillInput, setSkillInput] = useState("");
   const [preview, setPreview] = useState<string | null>(null);
+  const [imageFile, setImageFile] = useState<File | null>(null);
 
   const { data: profile, isLoading } = useProfile();
   const { mutate, isPending } = useUpdateProfile();
@@ -72,21 +74,36 @@ const Page = () => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const url = URL.createObjectURL(file);
-    setPreview(url);
+    setImageFile(file);
+    setPreview(URL.createObjectURL(file)); // only preview
   };
 
-  const onSubmit = (data: Profile) => {
-    mutate(data, {
-      onSuccess: () => {
-        router.push("/profile");
-      },
-      onError: (error: any) => {
-        console.log(error.response?.data?.message);
-      },
-    });
-  };
+  const onSubmit = async (data: Profile) => {
+    try {
+      let avatarUrl = profile?.avatar || "";
 
+      if (imageFile) {
+        avatarUrl = await uploadImage(imageFile);
+      }
+
+      mutate(
+        {
+          ...data,
+          avatar: avatarUrl,
+        },
+        {
+          onSuccess: () => {
+            router.push("/profile");
+          },
+          onError: (error: any) => {
+            console.log(error.response?.data?.message);
+          },
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
+  };
   if (isLoading) {
     return (
       <>
@@ -109,15 +126,13 @@ const Page = () => {
             <h2 className="font-semibold mb-3">Profile Photo</h2>
 
             <div className="flex items-center gap-4">
-              {preview && (
-                <Image
-                  src={preview}
-                  alt="preview"
-                  width={100}
-                  height={100}
-                  className="rounded-full"
-                />
-              )}
+              <Image
+                src={preview || profile!.avatar || userFallback}
+                alt="profile"
+                width={100}
+                height={100}
+                className="rounded-full"
+              />
 
               <input type="file" accept="image/*" onChange={handleImage} />
             </div>

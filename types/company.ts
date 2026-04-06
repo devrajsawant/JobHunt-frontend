@@ -5,8 +5,12 @@ export type CompanyForm = {
   size: string;
   website: string;
   description: string;
+  logo?: string;
+  contactEmail?: string;
+  contactPhone?: string;
+  linkedin?: string;
+  twitter?: string;
 };
-
 export type Company = {
   _id: string;
   name: string;

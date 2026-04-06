@@ -9,58 +9,58 @@ import toast from "react-hot-toast";
 import { useDispatch, useSelector } from "react-redux";
 import { login } from "@/store/authSlice";
 import { RootState } from "@/store/store";
-
-type CompanyForm = {
-  name: string;
-  location: string;
-  industry: string;
-  size: string;
-  website: string;
-  description: string;
-  contactEmail: string;
-  contactPhone: string;
-  linkedin: string;
-  twitter: string;
-  logo: string;
-};
+import { uploadImage } from "@/utils/imageUpload";
+import { CompanyForm } from "@/types/company";
 
 const Page = () => {
   const router = useRouter();
   const [preview, setPreview] = useState<string | null>(null);
   const currentUser = useSelector((state: RootState) => state.auth.user);
-
-  const { register, handleSubmit, setValue } = useForm<CompanyForm>();
+  const [imageFile, setImageFile] = useState<File | null>(null);
+  const { register, handleSubmit } = useForm<CompanyForm>();
 
   const handleImage = (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
 
-    const url = URL.createObjectURL(file);
-    setPreview(url);
-
-    setValue("logo", url);
+    setImageFile(file);
+    setPreview(URL.createObjectURL(file));
   };
 
   const { mutate, isPending } = useCreateCompany();
 
   const dispatch = useDispatch();
 
-  const onSubmit = (data: CompanyForm) => {
-    mutate(data, {
-      onSuccess: (res) => {
-        dispatch(
-          login({
-            user: currentUser,
-            company: res.company,
-          }),
-        );
 
-        router.push(`/companyProfile/${res.company.slug}`);
-      },
-      onError: (err: any) => {
-        toast.error(err.response?.data?.message || "Failed to create company");
-      },
-    });
+  const onSubmit = async (data: CompanyForm) => {
+    try {
+      let logoUrl = "";
+
+      if (imageFile) {
+        logoUrl = await uploadImage(imageFile);
+      }
+
+      mutate(
+        {
+          ...data,
+          logo: logoUrl,
+        },
+        {
+          onSuccess: (res) => {
+            dispatch(
+              login({
+                user: currentUser,
+                company: res.company,
+              }),
+            );
+
+            router.push(`/companyProfile/${res.company.slug}`);
+          },
+        },
+      );
+    } catch (err) {
+      console.error(err);
+    }
   };
 
   return (

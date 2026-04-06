@@ -2,7 +2,8 @@
 import Image from "next/image";
 import React, { useState } from "react";
 import { Star } from "lucide-react";
-
+import { useSelector } from "react-redux";
+import { RootState } from "@/store/store";
 import userFallback from "../../../../../public/userFallback.png";
 
 import CompanyAbout from "@/app/components/companyProfile/companyAbout";
@@ -14,7 +15,7 @@ import { useCompany } from "@/hooks/useCompany";
 
 const Page = () => {
   const [activeTab, setActiveTab] = useState("about");
-
+  const currentUser = useSelector((state: RootState) => state.auth.user);
   const params = useParams();
   const slug = params.slug as string;
   const { data: company, isLoading } = useCompany(slug);
@@ -27,12 +28,14 @@ const Page = () => {
     { id: "reviews", label: "Reviews" },
   ];
 
+  const isOwner = currentUser?._id === company?.ownerId;
+
   return (
     <div className="max-w-5xl mx-auto px-4 sm:px-6 py-6">
       {/* Company Banner */}
-      <div className="flex flex-col lg:flex-row justify-between gap-6">
+      <div className="flex flex-col lg:flex-row justify-between gap-2">
         {/* Left Section */}
-        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6">
+        <div className="flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 max-w-[80%]">
           {/* Logo */}
           <Image
             src={company.logo || userFallback}
@@ -43,7 +46,7 @@ const Page = () => {
           />
 
           {/* Info */}
-          <div>
+          <div className="">
             <h1 className="text-2xl sm:text-3xl lg:text-4xl font-bold text-gray-800">
               {company.name}
             </h1>
@@ -72,21 +75,23 @@ const Page = () => {
         </div>
 
         {/* Right Buttons */}
-        <div className="flex flex-wrap gap-3">
-          <Link
-            href={`/companyProfile/${slug}/edit`}
-            className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
-          >
-            Edit Details
-          </Link>
+        {isOwner && (
+          <div className="flex gap-3">
+            <Link
+              href={`/companyProfile/${slug}/edit`}
+              className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
+            >
+              Edit 
+            </Link>
 
-          <Link
-            href={`/companyProfile/${slug}/jobPosting`}
-            className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
-          >
-            Create Job
-          </Link>
-        </div>
+            <Link
+              href={`/companyProfile/${slug}/jobPosting`}
+              className="bg-zinc-700 text-white px-4 py-2 rounded-md text-sm sm:text-base h-fit"
+            >
+              Create Job
+            </Link>
+          </div>
+        )}
       </div>
 
       {/* Tabs */}

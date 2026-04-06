@@ -27,7 +27,9 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
   const { data: job, isLoading, isError } = useJobById(jobId);
   const { data: applications, isLoading: isAppLoading } = useMyApplications();
   const { mutate: applyJob, isPending } = useApplyToJob();
-
+  const currentUser = useSelector((state: RootState) => state.auth.user);
+  const isOwner =
+    currentUser?._id?.toString() === job?.companyId?.ownerId?.toString();
   const alreadyApplied = isLoggedIn
     ? applications?.some((app) => app.jobId._id === jobId)
     : false;
@@ -115,7 +117,7 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
       <p className="text-md text-gray-700 leading-relaxed">{job.description}</p>
 
       <div>
-        {isAppLoading ? (
+        {isAppLoading && isLoggedIn && !isOwner ? (
           <button
             disabled
             className="w-full py-2 bg-gray-400 text-white rounded-md my-3"
@@ -127,16 +129,18 @@ const FeedJobDetails = ({ isSingleJobPage }: props) => {
             Applied
           </div>
         ) : (
-          <button
-            onClick={handleApply}
-            disabled={isPending}
-            className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer disabled:opacity-50"
-          >
-            {isPending ? "Applying..." : "Apply"}
-            <MoveUpRight size={15} />
-          </button>
+          !isOwner && (
+            <button
+              onClick={handleApply}
+              disabled={isPending}
+              className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer disabled:opacity-50"
+            >
+              {isPending ? "Applying..." : "Apply"}
+              <MoveUpRight size={15} />
+            </button>
+          )
         )}
-        {isSingleJobPage && (
+        {isOwner && (
           <button className="flex border gap-2 justify-center items-center px-2 bg-gray-800 text-white py-1 rounded-md w-full my-3 cursor-pointer disabled:opacity-50">
             <Link href={`/companyProfile/${slug}/${jobId}/applications`}>
               Track Applications

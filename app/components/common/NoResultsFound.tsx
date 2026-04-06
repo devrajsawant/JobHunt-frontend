@@ -8,11 +8,11 @@ const NoResultsFound = () => {
         <Image
           src={noResultsFound}
           alt="Auth Page Svg"
-          height={600}
-          width={600}
+          height={500}
+          width={500}
           className="mx-auto mt-8 mb-8"
         />
-        <p>No Results Found</p>
+        <p>Nothing Found</p>
       </div>
     </div>
   );

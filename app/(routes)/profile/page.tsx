@@ -53,7 +53,7 @@ const Page = () => {
             {/* PROFILE HEADER */}
             <div className="flex flex-col sm:flex-row items-center sm:items-start gap-4 text-center sm:text-left">
               <Image
-                src={userFallback}
+                src={user.avatar || userFallback}
                 alt="profile"
                 width={100}
                 height={100}

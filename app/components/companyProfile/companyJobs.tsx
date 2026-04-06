@@ -17,12 +17,18 @@ const CompanyJobs = () => {
   if (isError) return <div className="text-center">Failed to load jobs.</div>;
 
   return (
-    <div className="grid sm:grid-cols-2 gap-4">
+    <div>
       {jobs && jobs.length > 0 ? (
-        jobs.map((job: Job) => (
-          <JobCard key={job._id} job={job} isCompanyPage />
-        ))
-      ) : <NoResultsFound />}
+        <div className="grid sm:grid-cols-2 gap-4 w-full">
+          {jobs.map((job: Job) => (
+            <JobCard key={job._id} job={job} isCompanyPage />
+          ))}
+        </div>
+      ) : (
+        <div className="">
+          <NoResultsFound />
+        </div>
+      )}
     </div>
   );
 };
